@@ -34,7 +34,7 @@ public:
     Shape(float px, float py, float w, float h);
     Shape(const Shape &r);
 
-    ~Shape();
+    virtual ~Shape()=0;
     /// @}
 
 
