@@ -182,7 +182,13 @@ void Shape::Reset()
    
 void Shape::Scale(float sf) 
 {
-	// TO DO
+	if (sf <= 0)
+    {
+        cout << endl << "ERROR: impossibile scalare col fattore di scalamento inserito" << endl;
+        return;
+    }
+    width = width * sf;
+    height = height * sf;
 }
 
 /* ----------------------------

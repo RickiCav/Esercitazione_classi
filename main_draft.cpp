@@ -28,7 +28,6 @@ int main()
     shapes[1]->SetText("rombo");
     shapes[2]->SetText("triangolo isoscele");
 
-
     // 3. Dump polimorfico
     cout << endl << "===== DUMP POLIMORFICO =====" << endl;
 
@@ -36,8 +35,23 @@ int main()
         cout << endl << "Figura [" << i << "]" << endl;
         shapes[i]->Dump();
     }
+    
+    // 4. Scalamento figure
+    cout << endl << "===== SCALAMENTO =====" << endl;
 
-    // 4. Distruzione figure
+    for (int i = 0; i < nShapes; i++) {
+        cout << endl << "Figura [" << i << "]" << endl;
+        shapes[i]->Scale(2);
+    }
+
+    cout << endl << "===== DUMP FIGURE SCALATE =====" << endl;
+    
+    for (int i = 0; i < nShapes; i++) {
+        cout << endl << "Figura [" << i << "]" << endl;
+        shapes[i]->Dump();
+    }
+
+    // Distruzione figure
 
     for (int i = 0; i < nShapes; i++) {
         if(shapes[i]!=NULL)
