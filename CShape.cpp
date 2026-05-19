@@ -233,7 +233,7 @@ void Shape::SetHeight(float h)
     }
     //Control if the new height is in the limits of the grid
     else if (y-h < 0) {
-        WarningMessage("ERROR (SetHeight): poligono fuori dalla griglia, inserire un valore più piccolo");
+        WarningMessage("ERROR (SetHeight): poligono fuori dalla griglia, inserire un valore piu' piccolo");
         return;
     }
     height = h;
@@ -351,6 +351,16 @@ void Shape::GetText(char* string)
     SafeStrCopy(string, text, TEXTSIZE);
 }
 
+void Shape::GetType(char* string)
+{
+    if (!string) return;
+    if (!text) {
+        string[0] = '\0';
+        return;
+    }
+    SafeStrCopy(string, type, TYPESIZE);
+}
+
 /* ----------------------------
    DEBUG and SERIALIZATION
    ---------------------------- */
@@ -380,4 +390,9 @@ void Shape::Dump()
     std::cout << "  Bounding Box Area:   " << GetBoundingBoxArea() << std::endl;
  	
 	cout << endl;
+}
+
+void Shape::DumpType()
+{
+    std::cout << type;
 }

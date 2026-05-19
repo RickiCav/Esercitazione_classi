@@ -85,6 +85,7 @@ public:
     float GetBoundingBoxArea();
 
     void GetText(char* string);
+    void GetType(char* string);
 	
 	virtual float GetPerimeter()=0;
 	virtual float GetArea()=0;
@@ -97,6 +98,7 @@ public:
     void ErrorMessage(const char *string);
     void WarningMessage(const char *string);
     virtual void Dump();
+    void DumpType();
     /// @}
 
 };
