@@ -1,3 +1,6 @@
+#Cartella "sicura"
+Others/
+
 #cartelle e file doxygen
 Doxyfile*
 html/
