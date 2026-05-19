@@ -14,7 +14,7 @@ using namespace std;
    ---------------------------- */
 
 /// @brief default constructor
-IsoscelesTriangle::IsoscelesTriangle() : Shape()
+IsoscelesTriangle::IsoscelesTriangle() : Shape(IT_TYPE)
 {
     cout << "IsoscelesTriangle - default constructor" << endl;
 }
@@ -24,7 +24,7 @@ IsoscelesTriangle::IsoscelesTriangle() : Shape()
 /// @param py position in the grid (y)
 /// @param w width of the bounding box
 /// @param h height of the bounding box
-IsoscelesTriangle::IsoscelesTriangle(float px, float py, float w, float h) : Shape(px, py, w, h)
+IsoscelesTriangle::IsoscelesTriangle(float px, float py, float w, float h) : Shape(px, py, w, h, IT_TYPE)
 {
     cout << "IsoscelesTriangle - constructor" << endl;
 }
@@ -72,7 +72,7 @@ bool IsoscelesTriangle::operator==(const IsoscelesTriangle &r)
 /// @brief default initialization of the object
 void IsoscelesTriangle::Init()
 {
-    Shape::Init();
+    Shape::Init(IT_TYPE);
 }
 
 /// @brief initialization of the object as a copy of an object 

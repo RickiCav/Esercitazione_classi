@@ -8,6 +8,8 @@
 
 #include "CShape.h"
 
+#define RH_TYPE "Rhombus"
+
 /// @class Rhombus
 /// @brief to manage an object with the shape of a rhombus
 class Rhombus : public Shape

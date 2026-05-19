@@ -13,7 +13,7 @@ using namespace std;
    ---------------------------- */
 
 /// @brief default constructor
-Rectangle::Rectangle() : Shape()
+Rectangle::Rectangle() : Shape(RE_TYPE)
 {
     cout << "Rectangle - default constructor" << endl;
 }
@@ -23,7 +23,7 @@ Rectangle::Rectangle() : Shape()
 /// @param py position in the grid (y)
 /// @param w width of the bounding box
 /// @param h height of the bounding box
-Rectangle::Rectangle(float px, float py, float w, float h) : Shape(px, py, w, h)
+Rectangle::Rectangle(float px, float py, float w, float h) : Shape(px, py, w, h, RE_TYPE)
 {
     cout << "Rectangle - constructor" << endl;
 }
@@ -71,7 +71,7 @@ bool Rectangle::operator==(const Rectangle &r)
 /// @brief default initialization of the object
 void Rectangle::Init()
 {
-    Shape::Init();
+    Shape::Init(RE_TYPE);
 }
 
 /// @brief initialization of the object as a copy of an object 

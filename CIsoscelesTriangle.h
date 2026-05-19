@@ -8,6 +8,8 @@
 
 #include "CShape.h"
 
+#define IT_TYPE "IsoscelesTriangle"
+
 /// @class IsoscelesTriangle
 /// @brief to manage an object with the shape of a IsoscelesTriangle
 class IsoscelesTriangle : public Shape

@@ -8,6 +8,8 @@
 
 #include "CShape.h"
 
+#define RE_TYPE "Rectangle"
+
 /// @class Rectangle
 /// @brief to manage an object with the shape of a rectangle
 class Rectangle : public Shape

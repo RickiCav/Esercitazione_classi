@@ -26,13 +26,13 @@ static void SafeStrCopy(char* dest, const char* src, size_t destSize) {
    CONSTRUCTORS / DESTRUCTOR
    ---------------------------- */
 /// @brief default constructor 
-Shape::Shape()
+Shape::Shape(const char* ty)
 {
 	
 	cout << "Shape - default constructor" << endl;
 	
 	text = nullptr;
-    Init();
+    Init(ty);
 }
 
 /// @brief constructor 
@@ -40,17 +40,16 @@ Shape::Shape()
 /// @param py position in the grid (y)
 /// @param w width of the bounding box
 /// @param h height of the bounding box
-Shape::Shape(float px, float py, float w, float h)
+Shape::Shape(float px, float py, float w, float h, const char* ty)
 {
 	cout << "Shape - constructor" << endl;
 	
 	text = nullptr;
-    Init();
+    type = nullptr;
+    Init(ty);
 	
 	SetPosition(px,py);
-	
-    SetWidth(w);
-    SetHeight(h);
+    SetDim(w, h);
 }
 
 /// @brief copy constructor
@@ -124,7 +123,7 @@ bool Shape::operator==(const Shape &r)
    ---------------------------- */
    
 /// @brief default initialization of the object
-void Shape::Init()
+void Shape::Init(const char* ty)
 {
     x = 0.0;
     y = 0.0;
@@ -138,6 +137,16 @@ void Shape::Init()
             return;
         }
     }
+
+    if (type == nullptr) {
+        type = new char[TYPESIZE];
+        if (type == nullptr) {
+            ErrorMessage("Init: memory allocation for type failed");
+            return;
+        }
+    }
+    
+    SafeStrCopy(type, ty,TYPESIZE);
     text[0] = '\0';
 }
 
@@ -184,11 +193,10 @@ void Shape::Scale(float sf)
 {
 	if (sf <= 0)
     {
-        cout << endl << "ERROR: impossibile scalare col fattore di scalamento inserito" << endl;
+        cout << endl << "ERROR (Scale): impossibile scalare col fattore di scalamento inserito, inserire un valore positivo e diverso da zero" << endl;
         return;
     }
-    width = width * sf;
-    height = height * sf;
+    SetDim(width * sf, height * sf);
 }
 
 /* ----------------------------
@@ -200,20 +208,19 @@ void Shape::Scale(float sf)
 /// @param py position on y
 void Shape::SetPosition(float px, float py)
 {
-	if (px < 0.) {
-		WarningMessage("SetPosition: the position in the grid cannot be a negative value; clamped to 0");
-		x = 0;
-	}		
-	else 
+	if (px < 0. || py < 0.) {
+		WarningMessage("ERROR (SetPosition): la posizione non puo' essere negativa, inserire valori positivi");
+		return;
+	}	
+    //Control if the inserted position is in the limits of the grid
+    else if (px > GRID_WIDTH || py > GRID_HEIGHT) {
+		WarningMessage("ERROR (SetPosition): posizione al di fuori della griglia");
+		return;
+    }	
+	else {
 		x = px;
-	
-	if (py < 0.) {
-		WarningMessage("SetPosition: the position in the grid cannot be a negative value; clamped to 0");
-		y = 0;
-	}		
-	else 
-		y = py;
-
+        y = py;
+    }
 }
 
 /// @brief set height of the object
@@ -221,8 +228,13 @@ void Shape::SetPosition(float px, float py)
 void Shape::SetHeight(float h)
 {
     if (h < 0.0) {
-        WarningMessage("SetHeight: negative value, clamped to 0");
-        h = 0.0;
+        WarningMessage("ERROR (SetHeight): valori negativo non ammissibile, inserire un valore positivo");
+        return;
+    }
+    //Control if the new height is in the limits of the grid
+    else if (y-h < 0) {
+        WarningMessage("ERROR (SetHeight): poligono fuori dalla griglia, inserire un valore più piccolo");
+        return;
     }
     height = h;
 }
@@ -232,8 +244,13 @@ void Shape::SetHeight(float h)
 void Shape::SetWidth(float w)
 {
     if (w < 0.0) {
-        WarningMessage("SetWidth: negative value, clamped to 0");
-        w = 0.0;
+        WarningMessage("ERROR (SetWidth): valori negativo non ammissibile, inserire un valore positivo");
+        return;
+    }
+    //Control if the new width is in the limits of the grid
+    else if (x+w > GRID_WIDTH) {
+        WarningMessage("ERROR (SetWidth): poligono fuori dalla griglia, inserire un valore più piccolo");
+        return;
     }
     width = w;
 }
@@ -356,6 +373,7 @@ void Shape::WarningMessage(const char *string)
 void Shape::Dump()
 {
     std::cout << "Shape Dump:" << std::endl;
+    std::cout << "  Shape type:  " << type << std::endl;
     std::cout << "  Position: (" << x << ", " << y << ")" << std::endl;
     std::cout << "  Width:  " << width << std::endl;
     std::cout << "  Height: " << height << std::endl;

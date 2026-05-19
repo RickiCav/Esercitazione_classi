@@ -6,7 +6,11 @@
 #ifndef SHAPE_H
 #define SHAPE_H
 
+#define GRID_WIDTH 100
+#define GRID_HEIGHT 100
+
 #define TEXTSIZE 1000
+#define TYPESIZE 20
 
 
 /// @class Shape
@@ -14,6 +18,9 @@
 class Shape
 {
 protected:
+
+    /// type of the shape
+    char* type;
 
     /// position of the shape in the page/grid
     float x;
@@ -30,8 +37,8 @@ public:
 
     /// @name CONSTRUCTORS / DESTRUCTOR
     /// @{
-    Shape();
-    Shape(float px, float py, float w, float h);
+    Shape(const char* ty);
+    Shape(float px, float py, float w, float h, const char* ty);
     Shape(const Shape &r);
 
     virtual ~Shape()=0;
@@ -47,7 +54,7 @@ public:
 
     /// @name BASIC HANDLING
     /// @{
-    void Init();
+    void Init(const char* ty);
     void Init(const Shape &r);
     void Reset();
     /// @}

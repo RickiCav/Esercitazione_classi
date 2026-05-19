@@ -14,7 +14,7 @@ using namespace std;
    ---------------------------- */
 
 /// @brief default constructor
-Rhombus::Rhombus() : Shape()
+Rhombus::Rhombus() : Shape(RH_TYPE)
 {
     cout << "Rhombus - default constructor" << endl;
 }
@@ -24,7 +24,7 @@ Rhombus::Rhombus() : Shape()
 /// @param py position in the grid (y)
 /// @param w width of the bounding box
 /// @param h height of the bounding box
-Rhombus::Rhombus(float px, float py, float w, float h) : Shape(px, py, w, h)
+Rhombus::Rhombus(float px, float py, float w, float h) : Shape(px, py, w, h, RH_TYPE)
 {
     cout << "Rhombus - constructor" << endl;
 }
@@ -72,7 +72,7 @@ bool Rhombus::operator==(const Rhombus &r)
 /// @brief default initialization of the object
 void Rhombus::Init()
 {
-    Shape::Init();
+    Shape::Init(RH_TYPE);
 }
 
 /// @brief initialization of the object as a copy of an object 
