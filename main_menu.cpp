@@ -12,9 +12,15 @@ using namespace std;
 
 void printMenu();
 void printPoligonList(Shape** poligons, int nP);
+void printModifyMenu();
+
 void poligonInfo(Shape** poligons, int nP);
+void poligonModify(Shape** poligons, int nP);
+void poligonMove(Shape** poligons, int nP);
+void deleteAllPoligons(Shape** poligons, int nP);
 
 int readInt();
+float readFloat();
 
 int main()
 {
@@ -24,6 +30,8 @@ int main()
     int selected = 0;
 
     bool run = true;
+
+    bool sure = false;
 
     
     shapes[nShapes++] = new Rectangle(0, 0, 10, 5);
@@ -39,10 +47,19 @@ int main()
                 poligonInfo(shapes, nShapes);
                 break;
             case 2:
+                poligonModify(shapes, nShapes);
+                break;
             case 3:
+                poligonMove(shapes, nShapes);
+                break;
             case 4:
             case 5:
             case 6:
+                cout << "Sei sicuro di voler eliminare tutti i poligoni? (1->si 0->no)" << endl;
+                sure = (bool) readInt();
+                if (sure)
+                    deleteAllPoligons(shapes, nShapes);
+                break;
             case 0:
                 run = !run;
                 break;
@@ -143,6 +160,22 @@ void printPoligonList(Shape** poligons, int nP)
     }
 }
 
+void printModifyMenu()
+{
+    cout << endl << "===== MENU' di MODIFICA =====" << endl << endl;
+
+    cout << "[1] Ridimensiona" << endl;
+    cout << "[2] Imposta testo" << endl;
+    cout << "[3] Imposta larghezza" << endl;
+    cout << "[4] Imposta altezza" << endl;
+
+    cout << endl << "[0] Esci" << endl;
+
+    cout << endl << "Quale operazione si vuole eseguire?" << endl;
+
+    return;
+}
+
 void poligonInfo(Shape** poligons, int nP)
 {
     int selected = 0;
@@ -170,6 +203,124 @@ void poligonInfo(Shape** poligons, int nP)
     }
 }
 
+
+void poligonModify(Shape** poligons, int nP)
+{
+    bool read = true;
+
+    int poligon_selected = 0;
+    int action_selected = 0;
+
+    printPoligonList(poligons, nP);
+    
+    cout << "[numero poligono] Per modificare il poligono" << endl;
+    cout << "[-1] Ritorna al menu" << endl << endl;
+
+    cout << "Quale operazione si vuole eseguire?" << endl;
+    
+    while(read) 
+    {
+        poligon_selected = readInt();
+
+        if (poligon_selected == -1)
+            return;
+
+        if (poligon_selected >= 0 && poligon_selected < nP) {
+            read = !read;
+        }
+        else {
+            cout << "Operazione non valida, inserire un valore tra quelli disponibili" << endl;
+        }
+    }
+
+    printModifyMenu();
+
+    read = true;
+    while(read) 
+    {
+        action_selected = readInt();
+
+        if (action_selected == -1)
+            return;
+
+        if (action_selected > 0 && action_selected < 5) {
+            read = !read;
+        }
+        else {
+            cout << "Operazione non valida, inserire un valore tra quelli disponibili" << endl;
+        }
+    }
+    
+    switch (action_selected)
+    {
+    case 1:
+        cout << "Inserire un valore per il ridimensionamento nel formato x.xx dove 1.00 = 100%" << ", maggiore di 0" << endl;
+        poligons[poligon_selected]->Scale(readFloat());
+        break;
+    case 2:
+        break;
+    case 3:
+        cout << "Inserire il nuovo valore per larghezza" << endl;
+        poligons[poligon_selected]->SetWidth(readFloat());
+        break;
+    case 4:
+        cout << "Inserire il nuovo valore per altezza" << endl;
+        poligons[poligon_selected]->SetHeight(readFloat());
+        break;
+    default:
+        cout << "ERROR (poligonModify): action not defined" << endl;
+        break;
+    }
+}
+
+void poligonMove(Shape** poligons, int nP)
+{
+    int newX = 0;
+    int newY = 0;
+    
+    bool read = true;
+
+    int selected = 0;
+
+    printPoligonList(poligons, nP);
+    
+    cout << "[numero poligono] Per modificare la posizione del poligono" << endl;
+    cout << "[-1] Ritorna al menu" << endl << endl;
+
+    cout << "Quale operazione si vuole eseguire?" << endl;
+    while(read) 
+    {
+        selected = readInt();
+
+        if (selected == -1)
+            return;
+
+        if (selected >= 0 && selected < nP) {
+            read = !read;
+        }
+        else {
+            cout << "Operazione non valida, inserire un valore tra quelli disponibili" << endl;
+        }
+    }
+
+    cout << "Inserire il nuovo valore per x" << endl;
+    newX = readInt();
+    cout << "Inserire il nuovo valore per y" << endl;
+    newY = readInt();
+    poligons[selected]->SetPosition(newX, newY);
+    return;
+}
+
+void deleteAllPoligons(Shape** poligons, int nP)
+{
+    for (int i = 0; i < nP; i++) {
+        if(poligons[i]!=NULL)
+        {
+            delete poligons[i];
+        }
+    }
+}
+
 int readInt()
 {
     bool read = true;
@@ -183,4 +334,19 @@ int readInt()
             read = false;
     }
     return integer;
+}
+
+float readFloat()
+{
+    bool read = true;
+    float floatNum = 0;
+    while (read) {
+        cin >> floatNum;
+        if (cin.fail()) {
+            cout << "Valore inserito non valido, riprova." << endl;
+        }
+        else 
+            read = false;
+    }
+    return floatNum;
 }
