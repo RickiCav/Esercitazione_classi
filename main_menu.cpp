@@ -12,6 +12,7 @@ using namespace std;
 
 void printMenu();
 void printPoligonList(Shape** poligons, int nP);
+void poligonInfo(Shape** poligons, int nP);
 
 int readInt();
 
@@ -24,7 +25,10 @@ int main()
 
     bool run = true;
 
-    shapes[1]->Dump();
+    
+    shapes[nShapes++] = new Rectangle(0, 0, 10, 5);
+    shapes[nShapes++] = new Rhombus(2, 2, 10, 6);
+    shapes[nShapes++] = new IsoscelesTriangle(1, 4, 8, 2);
 
     while (run) {
         printMenu();
@@ -32,7 +36,7 @@ int main()
 
         switch (selected) {
             case 1:
-                printPoligonList(shapes, nShapes);
+                poligonInfo(shapes, nShapes);
                 break;
             case 2:
             case 3:
@@ -130,15 +134,22 @@ void printMenu()
 
 void printPoligonList(Shape** poligons, int nP)
 {
-    int selected = 0;
     cout << endl << "===POLIGONI===" << endl << endl;
     cout << "\t\tTipo\t\t\t|Posizione|Larghezza|Altezza" << endl;
     for (int i = 0; i < nP; i++) {
         cout << "Poligono " << i << " :\t";
         poligons[i]->DumpType();
-        cout << "\t\t( " << poligons[i]->GetX() << " , " << poligons[i]->GetY() << " )\t" << poligons[i]->GetWidth() << "\t" << poligons[i]->GetHeight() << endl;
+        cout << "\t\t( " << poligons[i]->GetX() << " , " << poligons[i]->GetY() << " )\t" << poligons[i]->GetWidth() << "\t" << poligons[i]->GetHeight() << endl << endl;
     }
-    cout << endl << "[numero poligono] Per vedere piu' dettagli del poligono" << endl;
+}
+
+void poligonInfo(Shape** poligons, int nP)
+{
+    int selected = 0;
+
+    printPoligonList(poligons, nP);
+    
+    cout << "[numero poligono] Per vedere piu' dettagli del poligono" << endl;
     cout << "[-1] Ritorna al menu" << endl << endl;
 
     cout << "Quale operazione si vuole eseguire?" << endl;
@@ -157,7 +168,6 @@ void printPoligonList(Shape** poligons, int nP)
             cout << "Operazione non valida, inserire un valore tra quelli disponibili" << endl;
         }
     }
-    
 }
 
 int readInt()
