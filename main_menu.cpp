@@ -1,5 +1,5 @@
-#include <iostream>
-#include <cmath>
+#include <iostream>    // Input/Output standard: cout, cin, endl
+#include <cmath>       // Funzioni matematiche: sqrt, pow, etc.
 
 #include "CShape.h"
 #include "CRectangle.h"
@@ -168,13 +168,30 @@ void printMenu()
 
 void printPoligonList(Shape** poligons, int nP)
 {
-    cout << endl << "===POLIGONI===" << endl << endl;
-    cout << "\t\t Tipo \t\t\t| Posizione | Larghezza | Altezza|" << endl;
+    // Stampa lista di poligoni in formato verticale (una per riga)
+    // Formato: indice, tipo, posizione, larghezza, altezza, testo
+    
+    cout << endl << "==================== LISTA POLIGONI ====================" << endl << endl;
+    
     for (int i = 0; i < nP; i++) {
-        cout << "Poligono " << i << " :\t";
-        poligons[i]->DumpType();
-        cout << "\t\t( " << poligons[i]->GetX() << " , " << poligons[i]->GetY() << " )\t" << poligons[i]->GetWidth() << "\t" << poligons[i]->GetHeight() << endl << endl;
+        char type[TYPESIZE];
+        char text[TEXTSIZE];
+        
+        // Ottiene i dati dal poligono tramite i getter della classe Shape
+        poligons[i]->GetType(type);
+        poligons[i]->GetText(text);
+        
+        // Stampa ogni poligono su più righe per maggiore leggibilità
+        cout << "Poligono " << i << ":" << endl;
+        cout << "  Tipo:       " << type << endl;
+        cout << "  Posizione:  (" << (int)poligons[i]->GetX() << ", " 
+             << (int)poligons[i]->GetY() << ")" << endl;
+        cout << "  Larghezza:  " << poligons[i]->GetWidth() << endl;
+        cout << "  Altezza:    " << poligons[i]->GetHeight() << endl;
+        cout << "  Testo:      " << (text && text[0] != '\0' ? text : "(nessuno)") << endl;
+        cout << endl;
     }
+    cout << "======================================================" << endl << endl;
 }
 
 void printModifyMenu()
