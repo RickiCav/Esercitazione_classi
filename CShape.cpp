@@ -172,9 +172,15 @@ void Shape::Init(const Shape &r)
 /// @brief total reset of the object  
 void Shape::Reset()
 {
+    // Deallocazione della memoria allocata per il testo
     if (text != nullptr) {
         delete [] text;
         text = nullptr;
+    }
+    // Deallocazione di type (era mancante)
+    if (type != nullptr) {
+        delete [] type;
+        type = nullptr;
     }
     width = 0.0;
     height = 0.0;
@@ -231,8 +237,9 @@ void Shape::SetHeight(float h)
         WarningMessage("ERROR (SetHeight): valori negativo non ammissibile, inserire un valore positivo");
         return;
     }
-    //Control if the new height is in the limits of the grid
-    else if (y-h < 0) {
+    // Controlla che il poligono non esca dal bordo inferiore della griglia
+    // (corretto da y-h < 0 a y+h > GRID_HEIGHT)
+    else if (y+h > GRID_HEIGHT) {
         WarningMessage("ERROR (SetHeight): poligono fuori dalla griglia, inserire un valore piu' piccolo");
         return;
     }
