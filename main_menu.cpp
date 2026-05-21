@@ -79,6 +79,14 @@ int main()
 
     }
 
+    // Deallocazione di tutti i poligoni rimasti
+    for (int i = 0; i < nShapes; i++) {
+        if (shapes[i] != NULL) {
+            delete shapes[i];
+        }
+    }
+    nShapes = 0;
+
 
 
 
@@ -282,15 +290,45 @@ void poligonModify(Shape** poligons, int nP)
         poligons[poligon_selected]->Scale(readFloat());
         break;
     case 2:
+        cout << "Inserire il nuovo testo:" << endl;
+        char textInput[1000];
+        cin.ignore();  // Pulisci il buffer
+        cin.getline(textInput, 1000);
+        poligons[poligon_selected]->SetText(textInput);
         break;
+
     case 3:
-        cout << "Inserire il nuovo valore per larghezza" << endl;
-        poligons[poligon_selected]->SetWidth(readFloat());
+        
+            float newW = 0;
+            cout << "Inserire il nuovo valore per larghezza" << endl;
+            newW = readFloat();
+            // Verifica che la nuova bounding box resti dentro la griglia
+            if (isValidPosition(poligons[poligon_selected]->GetX(), poligons[poligon_selected]->GetY(), newW, poligons[poligon_selected]->GetHeight()))
+            {
+                poligons[poligon_selected]->SetWidth(newW);
+            }else
+            {
+                cout << "Modifica non eseguita: la nuova bounding box esce dalla griglia" << endl;
+            }
+        
         break;
+
     case 4:
-        cout << "Inserire il nuovo valore per altezza" << endl;
-        poligons[poligon_selected]->SetHeight(readFloat());
+        
+            float newH = 0;
+            cout << "Inserire il nuovo valore per altezza" << endl;
+            newH = readFloat();
+            // Verifica che la nuova bounding box resti dentro la griglia
+            if (isValidPosition(poligons[poligon_selected]->GetX(), poligons[poligon_selected]->GetY(), poligons[poligon_selected]->GetWidth(), newH))
+            {
+                poligons[poligon_selected]->SetHeight(newH);
+            }else
+            {
+                cout << "Modifica non eseguita: la nuova bounding box esce dalla griglia" << endl;
+            }
+        
         break;
+        
     default:
         cout << "ERRORE (poligonModify): caso non implementato" << endl;
         break;
