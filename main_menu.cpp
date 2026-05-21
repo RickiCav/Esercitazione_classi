@@ -13,11 +13,16 @@ using namespace std;
 void printMenu();
 void printPoligonList(Shape** poligons, int nP);
 void printModifyMenu();
+void printPoligonTypeMenu();
 
 void poligonInfo(Shape** poligons, int nP);
 void poligonModify(Shape** poligons, int nP);
 void poligonMove(Shape** poligons, int nP);
-void deleteAllPoligons(Shape** poligons, int nP);
+void poligonAdd(Shape** poligons, int &nP, int maxP);
+void poligonDelete(Shape** poligons, int &nP);
+void deleteAllPoligons(Shape** poligons, int &nP);
+
+bool isValidPosition(float x, float y, float w, float h);
 
 int readInt();
 float readFloat();
@@ -53,7 +58,11 @@ int main()
                 poligonMove(shapes, nShapes);
                 break;
             case 4:
+                poligonAdd(shapes, nShapes, MAX_SHAPES);
+                break;
             case 5:
+                poligonDelete(shapes, nShapes);
+                break;
             case 6:
                 cout << "Sei sicuro di voler eliminare tutti i poligoni? (1->si 0->no)" << endl;
                 sure = (bool) readInt();
@@ -176,6 +185,21 @@ void printModifyMenu()
     return;
 }
 
+void printPoligonTypeMenu()
+{
+    cout << endl << "===== SCEGLI TIPO DI POLIGONO =====" << endl << endl;
+
+    cout << "[1] Rettangolo (Rectangle)" << endl;
+    cout << "[2] Rombo (Rhombus)" << endl;
+    cout << "[3] Triangolo Isoscele (IsoscelesTriangle)" << endl;
+
+    cout << endl << "[0] Annulla" << endl;
+
+    cout << endl << "Quale tipo vuoi inserire?" << endl;
+
+    return;
+}
+
 void poligonInfo(Shape** poligons, int nP)
 {
     int selected = 0;
@@ -285,7 +309,7 @@ void poligonMove(Shape** poligons, int nP)
     printPoligonList(poligons, nP);
     
     cout << "[numero poligono] Per modificare la posizione del poligono" << endl;
-    cout << "[-1] Ritorna al menu" << endl << endl;
+    cout << "inserire [-1] per ritornare al menu" << endl << endl;
 
     cout << "Quale operazione si vuole eseguire?" << endl;
     while(read) 
@@ -311,13 +335,139 @@ void poligonMove(Shape** poligons, int nP)
     return;
 }
 
-void deleteAllPoligons(Shape** poligons, int nP)
+void deleteAllPoligons(Shape** poligons, int &nP)
 {
     for (int i = 0; i < nP; i++) {
         if(poligons[i]!=NULL)
         {
             delete poligons[i];
         }
+    }
+    nP = 0;
+    cout << "Tutti i poligoni sono stati eliminati." << endl;
+}
+
+bool isValidPosition(float x, float y, float w, float h)
+{
+    // Controlla se il poligono è completamente dentro la griglia
+    // Griglia: 0 <= x,y < 100 e 0 <= width,height < 100
+    
+    if (x < 0 || y < 0) {
+        cout << "Errore: la posizione non può essere negativa" << endl;
+        return false;
+    }
+    
+    if (w <= 0 || h <= 0) {
+        cout << "Errore: larghezza e altezza devono essere positive" << endl;
+        return false;
+    }
+    
+    if (x + w > GRID_WIDTH) {
+        cout << "Errore: il poligono esce dai bordi destri della griglia (max x+w = " << GRID_WIDTH << ")" << endl;
+        return false;
+    }
+    
+    if (y + h > GRID_HEIGHT) {
+        cout << "Errore: il poligono esce dai bordi inferiori della griglia (max y+h = " << GRID_HEIGHT << ")" << endl;
+        return false;
+    }
+    
+    return true;
+}
+
+void poligonAdd(Shape** poligons, int &nP, int maxP)
+{
+    if (nP >= maxP) {
+        cout << "Errore: numero massimo di poligoni raggiunto (" << maxP << ")" << endl;
+        return;
+    }
+    
+    printPoligonTypeMenu();
+    int typeSelected = readInt();
+    
+    if (typeSelected == 0) {
+        cout << "Inserimento annullato." << endl;
+        return;
+    }
+    
+    if (typeSelected < 1 || typeSelected > 3) {
+        cout << "Tipo non valido." << endl;
+        return;
+    }
+    
+    float px, py, w, h;
+    
+    cout << endl << "Inserire posizione e dimensioni del nuovo poligono:" << endl;
+    cout << "Posizione X (0-" << GRID_WIDTH << "): ";
+    px = readFloat();
+    cout << "Posizione Y (0-" << GRID_HEIGHT << "): ";
+    py = readFloat();
+    cout << "Larghezza: ";
+    w = readFloat();
+    cout << "Altezza: ";
+    h = readFloat();
+    
+    if (!isValidPosition(px, py, w, h)) {
+        return;
+    }
+    
+    switch (typeSelected) {
+        case 1:
+            poligons[nP++] = new Rectangle(px, py, w, h);
+            cout << "Rettangolo aggiunto con successo!" << endl;
+            break;
+        case 2:
+            poligons[nP++] = new Rhombus(px, py, w, h);
+            cout << "Rombo aggiunto con successo!" << endl;
+            break;
+        case 3:
+            poligons[nP++] = new IsoscelesTriangle(px, py, w, h);
+            cout << "Triangolo isoscele aggiunto con successo!" << endl;
+            break;
+    }
+}
+
+void poligonDelete(Shape** poligons, int &nP)
+{
+    bool read = true;
+    int selected = 0;
+
+    printPoligonList(poligons, nP);
+    
+    cout << "[numero poligono] Per eliminare il poligono" << endl;
+    cout << "[-1] Ritorna al menu" << endl << endl;
+
+    cout << "Quale operazione si vuole eseguire?" << endl;
+    while(read) 
+    {
+        selected = readInt();
+
+        if (selected == -1)
+            return;
+
+        if (selected >= 0 && selected < nP) {
+            read = !read;
+        }
+        else {
+            cout << "Operazione non valida, inserire un valore tra quelli disponibili" << endl;
+        }
+    }
+    
+    cout << "Sei sicuro di voler eliminare questo poligono? (1->si 0->no)" << endl;
+    bool sure = (bool) readInt();
+    
+    if (sure) {
+        if(poligons[selected] != NULL) {
+            delete poligons[selected];
+        }
+        
+        // Sposta gli elementi successivi indietro di uno
+        for (int i = selected; i < nP - 1; i++) {
+            poligons[i] = poligons[i + 1];
+        }
+        nP--;
+        
+        cout << "Poligono eliminato con successo!" << endl;
     }
 }
 
