@@ -136,7 +136,7 @@ void printMenu()
     cout << endl << "===== MENU' =====" << endl << endl;
 
     cout << "[1] Visualizza tutti i poligoni" << endl;
-    cout << "[2] Modifica le proprietà di un poligono" << endl;
+    cout << "[2] Modifica le proprieta' di un poligono" << endl;
     cout << "[3] Sposta un poligono sulla griglia" << endl;
     cout << "[4] Inserisci un nuovo poligono" << endl;
     cout << "[5] Cancella un poligono" << endl;
