@@ -161,7 +161,7 @@ void printMenu()
 void printPoligonList(Shape** poligons, int nP)
 {
     cout << endl << "===POLIGONI===" << endl << endl;
-    cout << "\t\tTipo\t\t\t|Posizione|Larghezza|Altezza" << endl;
+    cout << "\t\t Tipo \t\t\t| Posizione | Larghezza | Altezza|" << endl;
     for (int i = 0; i < nP; i++) {
         cout << "Poligono " << i << " :\t";
         poligons[i]->DumpType();
@@ -205,9 +205,9 @@ void poligonInfo(Shape** poligons, int nP)
     int selected = 0;
 
     printPoligonList(poligons, nP);
-    
-    cout << "[numero poligono] Per vedere piu' dettagli del poligono" << endl;
-    cout << "[-1] Ritorna al menu" << endl << endl;
+    cout <<"opzioni visualizzazione:" << endl;
+    cout << "-->[numero poligono] Per vedere piu' dettagli del poligono" << endl;
+    cout << "-->[-1] Ritorna al menu" << endl << endl;
 
     cout << "Quale operazione si vuole eseguire?" << endl;
     while(1) 
@@ -236,9 +236,9 @@ void poligonModify(Shape** poligons, int nP)
     int action_selected = 0;
 
     printPoligonList(poligons, nP);
-    
-    cout << "[numero poligono] Per modificare il poligono" << endl;
-    cout << "[-1] Ritorna al menu" << endl << endl;
+    cout <<"opzioni modifica:" << endl;
+    cout << "-->[numero poligono] Per modificare il poligono" << endl;
+    cout << "-->[-1] Ritorna al menu" << endl << endl;
 
     cout << "Quale operazione si vuole eseguire?" << endl;
     
@@ -292,7 +292,7 @@ void poligonModify(Shape** poligons, int nP)
         poligons[poligon_selected]->SetHeight(readFloat());
         break;
     default:
-        cout << "ERROR (poligonModify): action not defined" << endl;
+        cout << "ERRORE (poligonModify): caso non implementato" << endl;
         break;
     }
 }
@@ -307,9 +307,9 @@ void poligonMove(Shape** poligons, int nP)
     int selected = 0;
 
     printPoligonList(poligons, nP);
-    
-    cout << "[numero poligono] Per modificare la posizione del poligono" << endl;
-    cout << "inserire [-1] per ritornare al menu" << endl << endl;
+    cout <<"opzioni modifica:" << endl;
+    cout <<"-->[numero poligono] Per modificare la posizione del poligono" << endl;
+    cout << "-->[-1] per ritornare al menu" << endl << endl;
 
     cout << "Quale operazione si vuole eseguire?" << endl;
     while(read) 
@@ -323,11 +323,11 @@ void poligonMove(Shape** poligons, int nP)
             read = !read;
         }
         else {
-            cout << "Operazione non valida, inserire un valore tra quelli disponibili" << endl;
+            cout <<"Operazione non valida, inserire un valore tra quelli disponibili" << endl;
         }
     }
 
-    cout << "Inserire il nuovo valore per x" << endl;
+    cout <<"Inserire il nuovo valore per x" << endl;
     newX = readInt();
     cout << "Inserire il nuovo valore per y" << endl;
     newY = readInt();
@@ -353,17 +353,17 @@ bool isValidPosition(float x, float y, float w, float h)
     // Griglia: 0 <= x,y < 100 e 0 <= width,height < 100
     
     if (x < 0 || y < 0) {
-        cout << "Errore: la posizione non può essere negativa" << endl;
+        cout <<"Errore: la posizione non può essere negativa" << endl;
         return false;
     }
     
     if (w <= 0 || h <= 0) {
-        cout << "Errore: larghezza e altezza devono essere positive" << endl;
+        cout <<"Errore: larghezza e altezza devono essere positive" << endl;
         return false;
     }
     
     if (x + w > GRID_WIDTH) {
-        cout << "Errore: il poligono esce dai bordi destri della griglia (max x+w = " << GRID_WIDTH << ")" << endl;
+        cout <<"Errore: il poligono esce dai bordi destri della griglia (max x+w = " << GRID_WIDTH << ")" << endl;
         return false;
     }
     
@@ -378,7 +378,7 @@ bool isValidPosition(float x, float y, float w, float h)
 void poligonAdd(Shape** poligons, int &nP, int maxP)
 {
     if (nP >= maxP) {
-        cout << "Errore: numero massimo di poligoni raggiunto (" << maxP << ")" << endl;
+        cout <<"Errore: numero massimo di poligoni raggiunto (" << maxP << ")" << endl;
         return;
     }
     
@@ -397,17 +397,17 @@ void poligonAdd(Shape** poligons, int &nP, int maxP)
     
     float px, py, w, h;
     
-    cout << endl << "Inserire posizione e dimensioni del nuovo poligono:" << endl;
-    cout << "Posizione X (0-" << GRID_WIDTH << "): ";
+    cout << endl <<"Inserire posizione e dimensioni del nuovo poligono:" << endl;
+    cout <<"Posizione X (0-" << GRID_WIDTH << "): ";
     px = readFloat();
-    cout << "Posizione Y (0-" << GRID_HEIGHT << "): ";
+    cout <<"Posizione Y (0-" << GRID_HEIGHT << "): ";
     py = readFloat();
-    cout << "Larghezza: ";
+    cout <<"Larghezza: ";
     w = readFloat();
-    cout << "Altezza: ";
+    cout <<"Altezza: ";
     h = readFloat();
     
-    if (!isValidPosition(px, py, w, h)) {
+    if (!isValidPosition(px, py, w, h)){
         return;
     }
     
@@ -461,7 +461,7 @@ void poligonDelete(Shape** poligons, int &nP)
             delete poligons[selected];
         }
         
-        // Sposta gli elementi successivi indietro di uno
+        //Sposto gli elementi successivi indietro di uno
         for (int i = selected; i < nP - 1; i++) {
             poligons[i] = poligons[i + 1];
         }
@@ -475,13 +475,14 @@ int readInt()
 {
     bool read = true;
     int integer = 0;
-    while (read) {
+    while(read){
         cin >> integer;
-        if (cin.fail()) {
+        //se il .fail() = true se in questo caso il cin fallisce
+        if (cin.fail()){
             cout << "Valore inserito non valido, riprova." << endl;
         }
         else 
-            read = false;
+            read = false;//se il cin non fallisce allora esce dal ciclo
     }
     return integer;
 }
@@ -490,7 +491,8 @@ float readFloat()
 {
     bool read = true;
     float floatNum = 0;
-    while (read) {
+    //concetto ugaule a readInt() ma con float invece di int
+    while (read){
         cin >> floatNum;
         if (cin.fail()) {
             cout << "Valore inserito non valido, riprova." << endl;
