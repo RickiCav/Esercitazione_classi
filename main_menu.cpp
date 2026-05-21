@@ -239,7 +239,12 @@ void poligonInfo(Shape** poligons, int nP)
 void poligonModify(Shape** poligons, int nP)
 {
     bool read = true;
-
+    //case 2
+    char textInput[1000];
+    //case 3
+    float newW = 0;
+    //case 4
+    float newH = 0;
     int poligon_selected = 0;
     int action_selected = 0;
 
@@ -291,44 +296,44 @@ void poligonModify(Shape** poligons, int nP)
         break;
     case 2:
         cout << "Inserire il nuovo testo:" << endl;
-        char textInput[1000];
+        
         cin.ignore();  // Pulisci il buffer
         cin.getline(textInput, 1000);
         poligons[poligon_selected]->SetText(textInput);
         break;
 
+    
     case 3:
+    
         
-            float newW = 0;
-            cout << "Inserire il nuovo valore per larghezza" << endl;
-            newW = readFloat();
-            // Verifica che la nuova bounding box resti dentro la griglia
-            if (isValidPosition(poligons[poligon_selected]->GetX(), poligons[poligon_selected]->GetY(), newW, poligons[poligon_selected]->GetHeight()))
-            {
-                poligons[poligon_selected]->SetWidth(newW);
-            }else
-            {
-                cout << "Modifica non eseguita: la nuova bounding box esce dalla griglia" << endl;
-            }
-        
-        break;
+        cout << "Inserire il nuovo valore per larghezza" << endl;
+        newW = readFloat();
+        // Verifica che la nuova bounding box resti dentro la griglia
+        if (isValidPosition(poligons[poligon_selected]->GetX(), poligons[poligon_selected]->GetY(), newW, poligons[poligon_selected]->GetHeight()))
+        {
+            poligons[poligon_selected]->SetWidth(newW);
+        }else
+        {
+            cout << "Modifica non eseguita: la nuova bounding box esce dalla griglia" << endl;
+        }
+    
+    break;
 
     case 4:
-        
-            float newH = 0;
-            cout << "Inserire il nuovo valore per altezza" << endl;
-            newH = readFloat();
-            // Verifica che la nuova bounding box resti dentro la griglia
-            if (isValidPosition(poligons[poligon_selected]->GetX(), poligons[poligon_selected]->GetY(), poligons[poligon_selected]->GetWidth(), newH))
-            {
-                poligons[poligon_selected]->SetHeight(newH);
-            }else
-            {
-                cout << "Modifica non eseguita: la nuova bounding box esce dalla griglia" << endl;
-            }
-        
-        break;
-        
+    
+        cout << "Inserire il nuovo valore per altezza" << endl;
+        newH = readFloat();
+        // Verifica che la nuova bounding box resti dentro la griglia
+        if (isValidPosition(poligons[poligon_selected]->GetX(), poligons[poligon_selected]->GetY(), poligons[poligon_selected]->GetWidth(), newH))
+        {
+            poligons[poligon_selected]->SetHeight(newH);
+        }else
+        {
+            cout << "Modifica non eseguita: la nuova bounding box esce dalla griglia" << endl;
+        }
+    
+    break;
+
     default:
         cout << "ERRORE (poligonModify): caso non implementato" << endl;
         break;
