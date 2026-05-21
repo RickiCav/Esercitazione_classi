@@ -1,3 +1,11 @@
+/*! \file main_draft.cpp
+    \brief Test e prototipo del programma di gestione delle forme geometriche
+    \author Riccardo Cavagnaro Alessandro Fontanazzi
+    
+    File di prototipo che contiene test sulla gerarchia delle classi Shape.
+    Esegue operazioni di creazione, modifica e scalamento delle forme.
+*/
+
 #include <iostream>
 #include <cmath>
 
@@ -10,6 +18,8 @@ using namespace std;
 
 #define MAX_SHAPES 10
 
+/// @brief Programma principale per il test della gerarchia Shape
+/// @return 0 se il programma termina con successo
 int main()
 {
     Shape* shapes[MAX_SHAPES];

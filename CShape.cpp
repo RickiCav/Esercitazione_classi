@@ -358,6 +358,8 @@ void Shape::GetText(char* string)
     SafeStrCopy(string, text, TEXTSIZE);
 }
 
+/// @brief returns the type of the shape
+/// @param string pointer to a string where the type will be stored
 void Shape::GetType(char* string)
 {
     if (!string) return;
