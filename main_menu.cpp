@@ -1,5 +1,9 @@
-#include <iostream>    // Input/Output standard: cout, cin, endl
-#include <cmath>       // Funzioni matematiche: sqrt, pow, etc.
+/*! \file main_menu.cpp
+    \brief implementazione del menu principale per la gestione dei poligoni
+    \author Riccardo Cavagnaro Alessandro Fontanazzi
+*/
+#include <iostream>    //Input/Output standard: cout, cin, endl
+#include <cmath>       //Funzioni matematiche: sqrt, pow, etc.
 
 #include "CShape.h"
 #include "CRectangle.h"
@@ -10,21 +14,75 @@ using namespace std;
 
 #define MAX_SHAPES 10
 
+/** @brief Stampa il menu principale con le opzioni disponibili */
 void printMenu();
+
+/** @brief Stampa la lista di tutti i poligoni con i loro dati
+ *  @param poligons Array di puntatori ai poligoni
+ *  @param nP Numero attuale di poligoni nella lista
+ */
 void printPoligonList(Shape** poligons, int nP);
+
+/** @brief Stampa il menu per la modifica delle proprietà di un poligono */
 void printModifyMenu();
+
+/** @brief Stampa il menu per la scelta del tipo di poligono da inserire */
 void printPoligonTypeMenu();
 
+/** @brief Visualizza le informazioni dettagliate di un poligono selezionato
+ *  @param poligons Array di puntatori ai poligoni
+ *  @param nP Numero attuale di poligoni nella lista
+ */
 void poligonInfo(Shape** poligons, int nP);
+
+/** @brief Modifica le proprietà (dimensioni, testo) di un poligono selezionato
+ *  @param poligons Array di puntatori ai poligoni
+ *  @param nP Numero attuale di poligoni nella lista
+ */
 void poligonModify(Shape** poligons, int nP);
+
+/** @brief Sposta un poligono selezionato a una nuova posizione sulla griglia
+ *  @param poligons Array di puntatori ai poligoni
+ *  @param nP Numero attuale di poligoni nella lista
+ */
 void poligonMove(Shape** poligons, int nP);
+
+/** @brief Aggiunge un nuovo poligono alla lista
+ *  @param poligons Array di puntatori ai poligoni
+ *  @param nP Riferimento al numero di poligoni (viene incrementato)
+ *  @param maxP Numero massimo di poligoni consentiti
+ */
 void poligonAdd(Shape** poligons, int &nP, int maxP);
+
+/** @brief Elimina un poligono selezionato dalla lista
+ *  @param poligons Array di puntatori ai poligoni
+ *  @param nP Riferimento al numero di poligoni (viene decrementato)
+ */
 void poligonDelete(Shape** poligons, int &nP);
+
+/** @brief Elimina tutti i poligoni dalla lista
+ *  @param poligons Array di puntatori ai poligoni
+ *  @param nP Riferimento al numero di poligoni (viene settato a 0)
+ */
 void deleteAllPoligons(Shape** poligons, int &nP);
 
+/** @brief Valida se una posizione e dimensione bounding box sono dentro la griglia
+ *  @param x Posizione X
+ *  @param y Posizione Y
+ *  @param w Larghezza bounding box
+ *  @param h Altezza bounding box
+ *  @return true se la bounding box è valida e dentro la griglia, false altrimenti
+ */
 bool isValidPosition(float x, float y, float w, float h);
 
+/** @brief Legge un numero intero dall'input con controllo di validità
+ *  @return Il numero intero letto
+ */
 int readInt();
+
+/** @brief Legge un numero floating-point dall'input con controllo di validità
+ *  @return Il numero floating-point letto
+ */
 float readFloat();
 
 int main()
@@ -148,6 +206,18 @@ int main()
 
 }
 
+/**
+ * @brief Stampa il menu principale con le opzioni disponibili
+ * 
+ * Mostra un menu interattivo con 7 opzioni per gestire i poligoni:
+ * 1 - Visualizza tutti i poligoni
+ * 2 - Modifica le proprietà di un poligono
+ * 3 - Sposta un poligono sulla griglia
+ * 4 - Inserisci un nuovo poligono
+ * 5 - Cancella un poligono
+ * 6 - Cancella tutti i poligoni
+ * 0 - Esci dal programma
+ */
 void printMenu() 
 {
     cout << endl << "===== MENU' =====" << endl << endl;
@@ -166,6 +236,20 @@ void printMenu()
     return;
 }
 
+/**
+ * @brief Stampa la lista di tutti i poligoni con i loro dati in formato verticale
+ * 
+ * Per ogni poligono visualizza:
+ * - Indice nella lista
+ * - Tipo di poligono (Rectangle, Rhombus, IsoscelesTriangle)
+ * - Posizione sulla griglia (X, Y)
+ * - Larghezza della bounding box
+ * - Altezza della bounding box
+ * - Testo associato (o "(nessuno)" se vuoto)
+ * 
+ * @param poligons Array di puntatori ai poligoni
+ * @param nP Numero attuale di poligoni nella lista
+ */
 void printPoligonList(Shape** poligons, int nP)
 {
     // Stampa lista di poligoni in formato verticale (una per riga)
@@ -194,6 +278,16 @@ void printPoligonList(Shape** poligons, int nP)
     cout << "======================================================" << endl << endl;
 }
 
+/**
+ * @brief Stampa il menu per la modifica delle proprietà di un poligono
+ * 
+ * Mostra le opzioni disponibili per modificare un poligono:
+ * 1 - Ridimensiona (scale factor)
+ * 2 - Imposta testo
+ * 3 - Imposta larghezza
+ * 4 - Imposta altezza
+ * 0 - Esci dal menu
+ */
 void printModifyMenu()
 {
     cout << endl << "===== MENU' di MODIFICA =====" << endl << endl;
@@ -210,6 +304,15 @@ void printModifyMenu()
     return;
 }
 
+/**
+ * @brief Stampa il menu per la scelta del tipo di poligono da inserire
+ * 
+ * Mostra i tipi di poligoni disponibili:
+ * 1 - Rettangolo (Rectangle)
+ * 2 - Rombo (Rhombus)
+ * 3 - Triangolo Isoscele (IsoscelesTriangle)
+ * 0 - Annulla l'inserimento
+ */
 void printPoligonTypeMenu()
 {
     cout << endl << "===== SCEGLI TIPO DI POLIGONO =====" << endl << endl;
@@ -225,6 +328,18 @@ void printPoligonTypeMenu()
     return;
 }
 
+/**
+ * @brief Visualizza informazioni dettagliate su un poligono selezionato
+ * 
+ * La funzione:
+ * 1. Stampa la lista di tutti i poligoni
+ * 2. Chiede all'utente di selezionare un poligono tramite indice
+ * 3. Valida l'indice inserito
+ * 4. Stampa le informazioni complete del poligono (tramite Dump)
+ * 
+ * @param poligons Array di puntatori ai poligoni
+ * @param nP Numero attuale di poligoni nella lista
+ */
 void poligonInfo(Shape** poligons, int nP)
 {
     int selected = 0;
@@ -253,6 +368,21 @@ void poligonInfo(Shape** poligons, int nP)
 }
 
 
+/**
+ * @brief Modifica le proprietà di un poligono selezionato
+ * 
+ * La funzione permette di modificare:
+ * 1. Ridimensiona - usando Scale factor
+ * 2. Imposta testo - assegna nuovo testo al poligono
+ * 3. Imposta larghezza - con validazione che resti dentro la griglia
+ * 4. Imposta altezza - con validazione che resti dentro la griglia
+ * 
+ * Dopo ogni modifica di dimensioni, controlla che la bounding box
+ * rimanga completamente dentro la griglia usando isValidPosition().
+ * 
+ * @param poligons Array di puntatori ai poligoni
+ * @param nP Numero attuale di poligoni nella lista
+ */
 void poligonModify(Shape** poligons, int nP)
 {
     bool read = true;
@@ -357,6 +487,21 @@ void poligonModify(Shape** poligons, int nP)
     }
 }
 
+/**
+ * @brief Sposta un poligono selezionato a una nuova posizione sulla griglia
+ * 
+ * La funzione:
+ * 1. Stampa la lista di poligoni
+ * 2. Chiede al'utente di selezionare un poligono tramite indice
+ * 3. Chiede le nuove coordinate X e Y
+ * 4. Valida che il poligono rimanga dentro la griglia usando SetPosition()
+ * 
+ * Se la nuova posizione è invalida, SetPosition() rifiuta il movimento
+ * e mostra un messaggio di avvertimento.
+ * 
+ * @param poligons Array di puntatori ai poligoni
+ * @param nP Numero attuale di poligoni nella lista
+ */
 void poligonMove(Shape** poligons, int nP)
 {
     int newX = 0;
@@ -395,6 +540,15 @@ void poligonMove(Shape** poligons, int nP)
     return;
 }
 
+/**
+ * @brief Elimina tutti i poligoni dalla lista e libera la memoria
+ * 
+ * Itera su tutti i poligoni presenti nell'array, li dealloca
+ * usando delete, e imposta il contatore a 0.
+ * 
+ * @param poligons Array di puntatori ai poligoni
+ * @param nP Riferimento al numero di poligoni (viene settato a 0)
+ */
 void deleteAllPoligons(Shape** poligons, int &nP)
 {
     for (int i = 0; i < nP; i++) {
@@ -407,6 +561,23 @@ void deleteAllPoligons(Shape** poligons, int &nP)
     cout << "Tutti i poligoni sono stati eliminati." << endl;
 }
 
+/**
+ * @brief Valida se una posizione e dimensione bounding box sono all'interno della griglia
+ * 
+ * La funzione effettua i seguenti controlli:
+ * - Posizione X e Y non negative
+ * - Larghezza e altezza positive
+ * - La bounding box non esce dal bordo destro della griglia (x + w <= GRID_WIDTH)
+ * - La bounding box non esce dal bordo inferiore della griglia (y + h <= GRID_HEIGHT)
+ * 
+ * Se qualunque controllo fallisce, stampa un messaggio di errore specifico.
+ * 
+ * @param x Posizione X del poligono sulla griglia
+ * @param y Posizione Y del poligono sulla griglia
+ * @param w Larghezza della bounding box
+ * @param h Altezza della bounding box
+ * @return true se tutti i controlli passano e la bounding box è valida, false altrimenti
+ */
 bool isValidPosition(float x, float y, float w, float h)
 {
     // Controlla se il poligono è completamente dentro la griglia
@@ -435,6 +606,20 @@ bool isValidPosition(float x, float y, float w, float h)
     return true;
 }
 
+/**
+ * @brief Aggiunge un nuovo poligono alla lista
+ * 
+ * La funzione:
+ * 1. Controlla se c'è spazio per un nuovo poligono
+ * 2. Mostra il menu di scelta del tipo di poligono
+ * 3. Chiede posizione e dimensioni
+ * 4. Valida che la bounding box stia dentro la griglia
+ * 5. Crea il nuovo poligono tramite new e lo aggiunge alla lista
+ * 
+ * @param poligons Array di puntatori ai poligoni
+ * @param nP Riferimento al numero di poligoni (viene incrementato)
+ * @param maxP Numero massimo di poligoni consentiti
+ */
 void poligonAdd(Shape** poligons, int &nP, int maxP)
 {
     if (nP >= maxP) {
@@ -487,6 +672,20 @@ void poligonAdd(Shape** poligons, int &nP, int maxP)
     }
 }
 
+/**
+ * @brief Elimina un singolo poligono selezionato dalla lista
+ * 
+ * La funzione:
+ * 1. Stampa la lista di poligoni
+ * 2. Chiede al'utente di selezionare un poligono tramite indice
+ * 3. Chiede conferma prima dell'eliminazione
+ * 4. Dealloca il poligono usando delete
+ * 5. Riordina l'array spostando gli elementi successivi indietro di uno
+ * 6. Decrementa il contatore dei poligoni
+ * 
+ * @param poligons Array di puntatori ai poligoni
+ * @param nP Riferimento al numero di poligoni (viene decrementato)
+ */
 void poligonDelete(Shape** poligons, int &nP)
 {
     bool read = true;
@@ -531,6 +730,15 @@ void poligonDelete(Shape** poligons, int &nP)
     }
 }
 
+/**
+ * @brief Legge un numero intero dall'input con validazione
+ * 
+ * Questa funzione utilizza un ciclo per leggere l'input e controllare
+ * se la conversione a intero è andata a buon fine usando cin.fail().
+ * Se la conversione fallisce, richiede all'utente di reinserire il valore.
+ * 
+ * @return Il numero intero letto e validato
+ */
 int readInt()
 {
     bool read = true;
@@ -547,6 +755,15 @@ int readInt()
     return integer;
 }
 
+/**
+ * @brief Legge un numero floating-point dall'input con validazione
+ * 
+ * Questa funzione utilizza un ciclo per leggere l'input e controllare
+ * se la conversione a float è andata a buon fine usando cin.fail().
+ * Se la conversione fallisce, richiede all'utente di reinserire il valore.
+ * 
+ * @return Il numero floating-point letto e validato
+ */
 float readFloat()
 {
     bool read = true;
